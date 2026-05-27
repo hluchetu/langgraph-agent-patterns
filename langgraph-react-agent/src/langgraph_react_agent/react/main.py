@@ -7,7 +7,7 @@ import os
 from langchain_core.messages import HumanMessage
 
 from langgraph_react_agent.context import Configuration
-from langgraph_react_agent.graph import agent_graph
+from langgraph_react_agent.react.graph import agent_graph
 
 
 async def run(question: str, model: str) -> None:

@@ -1,10 +1,13 @@
-# LangGraph ReAct Agent
+# LangGraph Agent Patterns
 
-A minimal but production-patterned **ReAct agent** built with [LangGraph](https://github.com/langchain-ai/langgraph) and [Ollama](https://ollama.com), structured after the official [langchain-ai/react-agent](https://github.com/langchain-ai/react-agent) reference implementation.
+A small collection of agent architecture patterns built with [LangGraph](https://github.com/langchain-ai/langgraph) and [Ollama](https://ollama.com).
 
-ReAct (Reasoning + Acting) lets a model loop between thinking, calling tools, observing results, and thinking again — instead of answering in one shot.
+It currently includes:
 
-## How it works
+- **ReAct**: the model reasons, calls tools, observes results, and repeats.
+- **Plan-and-execute**: the model creates a plan, executes one step, observes, updates the plan, and continues or finishes.
+
+## ReAct
 
 ```
         +-----------+
@@ -46,17 +49,33 @@ AIMessage     → "The product of 1234 and 5678 is 7,006,652."
 
 The model never computed the math — it delegated to the tool, observed the result, then answered.
 
+## Plan-and-execute
+
+The planning graph adds a higher-level loop around execution:
+
+1. `create_plan` breaks the objective into steps
+2. `execute_step` runs the next step using the ReAct graph as the executor
+3. `update_plan` revises the remaining plan or produces a final answer
+4. Loop back to `execute_step` until the objective is complete
+
+```bash
+uv run planning-agent "Research what ReAct agents are and summarize the idea"
+```
+
 ## Project structure
 
 ```
 src/langgraph_react_agent/
-├── state.py      # InputState (public) and State (internal + is_last_step)
 ├── context.py    # Configuration dataclass, reads overrides from env vars
-├── prompts.py    # SYSTEM_PROMPT constant with {system_time} placeholder
-├── utils.py      # load_chat_model — provider-agnostic via init_chat_model
+├── graph.py      # ReAct nodes, edges, routing logic, compiled agent_graph
+├── main.py       # ReAct CLI entry point
+├── planning_graph.py   # plan-and-execute graph
+├── planning_main.py    # planning CLI entry point
+├── planning_state.py   # planning graph state
+├── prompts.py    # prompt constants
+├── state.py      # ReAct graph state
 ├── tools.py      # calculator and current_time tools
-├── graph.py      # nodes, edges, routing logic, compiled agent_graph
-└── main.py       # CLI entry point
+└── utils.py      # load_chat_model — provider-agnostic via init_chat_model
 ```
 
 ## Setup
@@ -79,6 +98,7 @@ uv sync
 uv run react-agent "what is 1234 * 5678"
 uv run react-agent "what time is it right now"
 uv run react-agent "what is the capital of France"
+uv run planning-agent "Create a two-step plan to answer what 1234 * 5678 is, then answer"
 ```
 
 Use a different model:

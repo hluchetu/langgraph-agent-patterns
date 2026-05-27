@@ -1,7 +1,7 @@
 [project]
-name = "langgraph-react-agent"
+name = "langgraph-agent-patterns"
 version = "0.1.0"
-description = "A minimal ReAct agent built with LangGraph and Ollama"
+description = "Agent architecture patterns built with LangGraph and Ollama"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
@@ -12,7 +12,8 @@ dependencies = [
 ]
 
 [project.scripts]
-react-agent = "langgraph_react_agent.main:main"
+react-agent = "langgraph_react_agent.react.main:main"
+planning-agent = "langgraph_react_agent.planning.main:main"
 
 [build-system]
 requires = ["hatchling"]

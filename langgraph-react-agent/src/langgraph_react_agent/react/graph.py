@@ -9,7 +9,7 @@ from langgraph.prebuilt import ToolNode
 from langgraph.runtime import Runtime
 
 from langgraph_react_agent.context import Configuration
-from langgraph_react_agent.state import InputState, State
+from langgraph_react_agent.react.state import InputState, State
 from langgraph_react_agent.tools import TOOLS
 from langgraph_react_agent.utils import load_chat_model
 
