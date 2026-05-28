@@ -14,6 +14,7 @@ dependencies = [
 [project.scripts]
 react-agent = "langgraph_react_agent.react.main:main"
 planning-agent = "langgraph_react_agent.planning.main:main"
+routing-agent = "langgraph_react_agent.routing.main:main"
 
 [build-system]
 requires = ["hatchling"]
